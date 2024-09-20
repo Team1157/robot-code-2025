@@ -11,8 +11,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class SwerveModule {
-  private static final double kWheelRadius = 0.0508; // Wheel radius in meters
-  private static final int kEncoderResolution = 4096;
+  private static final double kWheelRadius = 0.1016; // 4 inch wheel radius in meters
+  private static final int kEncoderResolution = 1024; // lamprey is 10 bit
 
   private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
   private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
@@ -38,9 +38,6 @@ public class SwerveModule {
   public SwerveModule(int driveMotorChannel, int turningMotorChannel) {
     m_driveMotor = new TalonFX(driveMotorChannel); // TalonFX for driving
     m_turningMotor = new TalonSRX(turningMotorChannel); // TalonSRX for turning
-
-    // Configure motors (e.g., sensor setup, PID values, etc.)
-    // You may want to configure factory defaults, set sensor positions, etc.
   }
 
   /**
