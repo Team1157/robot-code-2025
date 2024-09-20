@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -9,9 +5,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.SPI;
 
-/** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
   public static final double kMaxSpeed = 3.0; // 3 meters per second
   public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
@@ -21,12 +17,14 @@ public class Drivetrain {
   private final Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
   private final Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
 
-  private final SwerveModule m_frontLeft = new SwerveModule(1, 2, 0, 1, 2, 3);
-  private final SwerveModule m_frontRight = new SwerveModule(3, 4, 4, 5, 6, 7);
-  private final SwerveModule m_backLeft = new SwerveModule(5, 6, 8, 9, 10, 11);
-  private final SwerveModule m_backRight = new SwerveModule(7, 8, 12, 13, 14, 15);
+  // Each module uses a TalonFX for drive and a TalonSRX for turning
+  private final SwerveModule m_frontLeft = new SwerveModule(1, 2); // Drive = TalonFX, Turn = TalonSRX
+  private final SwerveModule m_frontRight = new SwerveModule(3, 4); 
+  private final SwerveModule m_backLeft = new SwerveModule(5, 6); 
+  private final SwerveModule m_backRight = new SwerveModule(7, 8);
 
-  private final AnalogGyro m_gyro = new AnalogGyro(0);
+  // Replace AnalogGyro with ADXRS450_Gyro
+  private final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
 
   private final SwerveDriveKinematics m_kinematics =
       new SwerveDriveKinematics(
@@ -35,7 +33,7 @@ public class Drivetrain {
   private final SwerveDriveOdometry m_odometry =
       new SwerveDriveOdometry(
           m_kinematics,
-          m_gyro.getRotation2d(),
+          m_gyro.getRotation2d(),  // Use ADXRS450_Gyro for rotation
           new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -48,12 +46,12 @@ public class Drivetrain {
   }
 
   /**
-   * Method to drive the robot using joystick info.
+   * Method to drive the robot using joysticks
    *
-   * @param xSpeed Speed of the robot in the x direction (forward).
+   * @param xSpeed Speed of the robot in the x direction (forwards).
    * @param ySpeed Speed of the robot in the y direction (sideways).
-   * @param rot Angular rate of the robot.
-   * @param fieldRelative Whether the provided x and y speeds are relative to the field.
+   * @param rot Angular spinny rate of the robot.
+   * @param fieldRelative Whether the provided x and y speeds are field relative.
    */
   public void drive(
       double xSpeed, double ySpeed, double rot, boolean fieldRelative, double periodSeconds) {
@@ -62,7 +60,7 @@ public class Drivetrain {
             ChassisSpeeds.discretize(
                 fieldRelative
                     ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                        xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+                        xSpeed, ySpeed, rot, m_gyro.getRotation2d())  // Use ADXRS450_Gyro for field-relative control
                     : new ChassisSpeeds(xSpeed, ySpeed, rot),
                 periodSeconds));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
@@ -72,10 +70,10 @@ public class Drivetrain {
     m_backRight.setDesiredState(swerveModuleStates[3]);
   }
 
-  /** Updates the field relative position of the robot. */
+  /** Updates the field-relative position of the robot. */
   public void updateOdometry() {
     m_odometry.update(
-        m_gyro.getRotation2d(),
+        m_gyro.getRotation2d(),  // Use ADXRS450_Gyro for odometry updates
         new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
