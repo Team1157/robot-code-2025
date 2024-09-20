@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     driveWithJoystick(true);
-    // Reset gyro and calibrate gyro based on button inputs
+    // Reset gyro with z button on the gcc and calibrate gyro with the a button 
     if (m_controller.getRawButton(8)) {
       gyro.reset();
     }
@@ -47,10 +47,9 @@ public class Robot extends TimedRobot {
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
-    // Get the x speed. We are inverting this because Xbox controllers return
-    // negative values when we push forward.
+    // Get the x speed. We aren't inverting cause gamecube wooh
     final var xSpeed =
-        -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_controller.getLeftY(), 0.02))
+        m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_controller.getLeftY(), 0.02))
             * Drivetrain.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
