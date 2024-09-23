@@ -1,13 +1,14 @@
 package frc.robot;
 
+import org.littletonrobotics.junction.LoggedRobot;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private final XboxController m_controller = new XboxController(0);
   private final Drivetrain m_swerve = new Drivetrain();
   private ADXRS450_Gyro gyro;
