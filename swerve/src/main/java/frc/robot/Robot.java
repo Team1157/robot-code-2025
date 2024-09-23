@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    driveWithJoystick(false);
+    driveWithJoystick(true);
     m_swerve.updateOdometry();
   }
 
@@ -56,9 +56,7 @@ public class Robot extends TimedRobot {
             * Drivetrain.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
-    // positive value when we pull to the left (remember, CCW is positive in
-    // mathematics). Xbox controllers return positive values when you pull to
-    // the right by default.
+    // positive value when we pull to the left
     final var rot =
         -m_rotLimiter.calculate(MathUtil.applyDeadband(m_controller.getRightX(), 0.02))
             * Drivetrain.kMaxAngularSpeed;

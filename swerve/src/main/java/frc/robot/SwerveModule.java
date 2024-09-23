@@ -22,7 +22,6 @@ public class SwerveModule {
     private final TalonFX m_driveMotor; // Falcon 500 (TalonFX) for driving
     private final TalonSRX m_turningMotor; // TalonSRX for turning
 
-    // Gains are for example purposes only - must be determined for your own robot!
     private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
     private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
         1,
@@ -90,7 +89,7 @@ public class SwerveModule {
     public void setDesiredState(SwerveModuleState desiredState) {
         var encoderRotation = new Rotation2d(m_turningMotor.getSelectedSensorPosition() * 2 * Math.PI / kEncoderResolution);
 
-        // Optimize the reference state to avoid spinning further than 90 degrees
+        // Optimize the reference state to avoid spinning further than 90 degrees in one thingy
         SwerveModuleState state = SwerveModuleState.optimize(desiredState, encoderRotation);
 
         // Calculate the drive output from the drive PID controller.
@@ -99,7 +98,7 @@ public class SwerveModule {
             state.speedMetersPerSecond
         );
 
-        // Calculate the turning motor output from the turning PID controller.
+        // Calculate the turning motor output from the turning PID controller that definitely exists :3
         final double turnOutput = m_turningPIDController.calculate(
             m_turningMotor.getSelectedSensorPosition() * 2 * Math.PI / kEncoderResolution, 
             state.angle.getRadians()
