@@ -43,6 +43,13 @@
       "/FMSInfo": "FMSInfo"
     }
   },
+  "NetworkTables": {
+    "transitory": {
+      "SwerveModule7": {
+        "open": true
+      }
+    }
+  },
   "NetworkTables Info": {
     "visible": true
   }
