@@ -88,30 +88,37 @@ public class SwerveModule {
    *
    * @param desiredState Desired state with speed and angle.
    */
+  private long lastPrintTime = 0;
+
   public void setDesiredState(SwerveModuleState desiredState) {
-    var encoderRotation = new Rotation2d(m_turningMotor.getSelectedSensorPosition() * 2 * Math.PI / kEncoderResolution);
-
-    // Optimize the reference state to avoid spinning further than 90 degrees in one
-    // thingy
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, encoderRotation);
-
-    // Calculate the drive output from the drive PID controller.
-    final double driveOutput = m_drivePIDController.calculate(
-        m_driveMotor.getVelocity().getValue() * kWheelRadius * 2 * Math.PI / kEncoderResolution,
-        state.speedMetersPerSecond);
-
-    // Calculate the turning motor output from the turning PID controller that
-    // definitely exists :3
-    final double turnOutput = m_turningPIDController.calculate(
-        m_turningMotor.getSelectedSensorPosition() * 2 * Math.PI / kEncoderResolution,
-        state.angle.getRadians());
-
-    // Publish desired state to NetworkTables
-    ntTable.getEntry("DesiredSpeed").setDouble(state.speedMetersPerSecond);
-    ntTable.getEntry("DesiredAngle").setDouble(state.angle.getDegrees());
-
-    // Set motor outputs
-    m_driveMotor.set(driveOutput);
-    m_turningMotor.set(ControlMode.Position, turnOutput);
+      var encoderRotation = new Rotation2d(m_turningMotor.getSelectedSensorPosition() * 2 * Math.PI / kEncoderResolution);
+  
+      // Optimize the reference state to avoid spinning the thingy further than 90 degrees
+      SwerveModuleState state = SwerveModuleState.optimize(desiredState, encoderRotation);
+  
+      // Calculate the drive output from the drive PID controller
+      final double driveOutput = m_drivePIDController.calculate(
+          m_driveMotor.getVelocity().getValue() * kWheelRadius * 2 * Math.PI / kEncoderResolution,
+          state.speedMetersPerSecond);
+  
+      // Calculate the turning motor output from the turning PID controller
+      final double turnOutput = m_turningPIDController.calculate(
+          m_turningMotor.getSelectedSensorPosition() * 2 * Math.PI / kEncoderResolution,
+          state.angle.getRadians());
+  
+      // Publish desired state to NetworkTables
+      ntTable.getEntry("DesiredSpeed").setDouble(state.speedMetersPerSecond);
+      ntTable.getEntry("DesiredAngle").setDouble(state.angle.getDegrees());
+  
+      // Set motor outputs
+      m_driveMotor.set(driveOutput);
+      m_turningMotor.set(ControlMode.Position, turnOutput);
+  
+      // Print turnOutput every second so i can debuggggggg
+      long currentTime = System.currentTimeMillis();
+      if (currentTime - lastPrintTime >= 4000) {
+          System.out.println("Turn Output: " + turnOutput);
+          lastPrintTime = currentTime;
+      }
   }
 }
