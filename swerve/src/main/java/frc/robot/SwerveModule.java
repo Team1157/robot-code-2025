@@ -16,19 +16,21 @@ public class SwerveModule {
   private static final double kWheelRadius = 0.1016; // 4 inch wheel radius in meters
   private static final int kEncoderResolution = 1024; // lamprey is 10 bit
 
-  private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
   private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
   private final TalonFX m_driveMotor; // Falcon 500 (TalonFX) for driving
   private final TalonSRX m_turningMotor; // TalonSRX for turning
 
   private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
-  private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
-      1,
-      0,
-      0,
-      new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
+  // Set a high velocity limit for turning PID controller to effectively have no speed limit, but retain the acceleration limit
+  private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
+      1, 
+      0, 
+      0, 
+      new TrapezoidProfile.Constraints(Double.MAX_VALUE, kModuleMaxAngularAcceleration) // No speed limit, but max accel remains
+  );
+  
   // NetworkTables
   private final NetworkTableInstance ntInstance;
   private final NetworkTable ntTable;

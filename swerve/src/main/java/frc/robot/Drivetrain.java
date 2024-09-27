@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.SPI;
 
 public class Drivetrain {
-  public static final double kMaxSpeed = 3.0; // 3 meters per second
+  public static final double kMaxSpeed = 3.0; // 3 meters per second, 9.85 feet per second
   public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
   private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
