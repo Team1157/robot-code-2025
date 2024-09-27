@@ -2,7 +2,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,7 +19,7 @@ public class SwerveModule {
   private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
   private final TalonFX m_driveMotor; // Falcon 500 (TalonFX) for driving
-  private final TalonSRX m_turningMotor; // TalonSRX for turning
+  private final WPI_TalonSRX m_turningMotor; // TalonSRX for turning
 
   private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
 
@@ -44,7 +44,7 @@ public class SwerveModule {
    */
   public SwerveModule(int driveMotorChannel, int turningMotorChannel) {
     m_driveMotor = new TalonFX(driveMotorChannel); // TalonFX for driving
-    m_turningMotor = new TalonSRX(turningMotorChannel); // TalonSRX for turning
+    m_turningMotor = new WPI_TalonSRX(turningMotorChannel); // TalonSRX for turning
 
     // Initialize NetworkTables
     ntInstance = NetworkTableInstance.getDefault();
