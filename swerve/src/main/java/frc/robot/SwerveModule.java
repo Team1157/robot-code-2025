@@ -26,8 +26,8 @@ public class SwerveModule {
   // Set a high velocity limit for turning PID controller to effectively have no speed limit, but retain the acceleration limit
   private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
       1, 
-      0, 
-      0, 
+      0.2, 
+      0.1, 
       new TrapezoidProfile.Constraints(Double.MAX_VALUE, kModuleMaxAngularAcceleration) // No speed limit, but max accel remains
   );
   

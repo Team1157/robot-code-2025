@@ -36,12 +36,27 @@
           "open": true
         }
       },
+      "Talon SRX[2]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[2]/Quad Encoder": {
+        "header": {
+          "open": true
+        }
+      },
       "Talon SRX[8]": {
         "header": {
           "open": true
         }
       },
       "Talon SRX[9]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[9]/Quad Encoder": {
         "header": {
           "open": true
         }
@@ -55,6 +70,15 @@
   },
   "NetworkTables": {
     "transitory": {
+      "SwerveModule1": {
+        "open": true
+      },
+      "SwerveModule3": {
+        "open": true
+      },
+      "SwerveModule5": {
+        "open": true
+      },
       "SwerveModule7": {
         "open": true
       }
