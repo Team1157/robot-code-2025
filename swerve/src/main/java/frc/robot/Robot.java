@@ -1,7 +1,6 @@
 package frc.robot;
 
 import org.littletonrobotics.junction.LoggedRobot;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
@@ -25,6 +24,11 @@ public class Robot extends LoggedRobot {
     // Initialize and calibrate gyro
     gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
     gyro.calibrate();
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    System.out.println("I should really use the flywheel simulation to sim all of swerve");
   }
 
   @Override
