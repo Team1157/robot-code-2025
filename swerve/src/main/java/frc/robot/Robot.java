@@ -28,7 +28,6 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void simulationPeriodic() {
-    System.out.println("I should really use the flywheel simulation to sim all of swerve");
   }
 
   @Override
