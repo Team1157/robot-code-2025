@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
@@ -14,7 +15,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class SwerveModule {
   private static final double kWheelRadius = 0.1016; // 4 inch wheel radius in meters
-  private static final int kEncoderResolution = 1024; // lamprey is 10 bit
+  private static final int kEncoderResolution = 1024; // Lamprey is 10-bit
 
   private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
@@ -45,6 +46,9 @@ public class SwerveModule {
   public SwerveModule(int driveMotorChannel, int turningMotorChannel) {
     m_driveMotor = new TalonFX(driveMotorChannel); // TalonFX for driving
     m_turningMotor = new WPI_TalonSRX(turningMotorChannel); // TalonSRX for turning
+
+    // Configure the Lamprey2 encoder in quadrature mode
+    m_turningMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10); // Feedback device is set to Quadrature Encoder
 
     // Initialize NetworkTables
     ntInstance = NetworkTableInstance.getDefault();
