@@ -12,6 +12,9 @@ public class Robot extends LoggedRobot {
   private final Drivetrain m_swerve = new Drivetrain();
   // Call the shooter.java file that just runs one talon srx for now but if we have a multi motor shooter i'll add more
   private final Shooter m_shooter = new Shooter(9, m_controller); // shooter motorcontroller will be can id 9
+  // Call the intake.java file that just runs one talon srx for now but if we have a multi motor shooter i'll add more
+  private final Intake m_intake = new Intake(10, m_controller); // shooter motorcontroller will be can id 9
+  
   private ADXRS450_Gyro gyro;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
@@ -40,7 +43,7 @@ public class Robot extends LoggedRobot {
   public void teleopPeriodic() {
     // call the shooter to actually work
     m_shooter.teleopPeriodic();
-
+    m_intake.teleopPeriodic();
     driveWithJoystick(true);
     // Reset gyro with z button on the gcc and calibrate gyro with the a button
     if (m_controller.getRawButton(8)) {

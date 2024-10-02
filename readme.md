@@ -2,6 +2,8 @@
 
 1. **CAN ID 9** – TalonSRX for the shooter.
    - Connected to the shooter motor, controlled by the `Shooter` class.
+1. **CAN ID 10** – TalonSRX for the intake.
+   - Connected to the intake motor, controlled by the `Intake` class.
 
 3. **Drivetrain Motors**:
    - **Drive Motors (TalonFX)**:
