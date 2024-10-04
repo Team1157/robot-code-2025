@@ -51,6 +51,11 @@
           "open": true
         }
       },
+      "Talon SRX[2]/Pulse Width Input": {
+        "header": {
+          "open": true
+        }
+      },
       "Talon SRX[2]/Quad Encoder": {
         "header": {
           "open": true
@@ -71,6 +76,16 @@
           "open": true
         }
       }
+    },
+    "PowerDistributions": {
+      "0": {
+        "PowerDistribution[0]": {
+          "open": true
+        }
+      },
+      "window": {
+        "visible": true
+      }
     }
   },
   "NTProvider": {
@@ -80,21 +95,53 @@
   },
   "NetworkTables": {
     "transitory": {
-      "SwerveModule1": {
+      "FMSInfo": {
         "open": true
+      },
+      "Shuffleboard": {
+        ".metadata": {
+          "open": true
+        },
+        ".recording": {
+          "open": true
+        }
       },
       "SwerveModule3": {
-        "open": true
-      },
-      "SwerveModule5": {
-        "open": true
-      },
-      "SwerveModule7": {
         "open": true
       }
     }
   },
   "NetworkTables Info": {
+    "Connections": {
+      "open": true
+    },
     "visible": true
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 155
+        },
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 155
+        }
+      ],
+      "window": {
+        "visible": false
+      }
+    }
   }
 }

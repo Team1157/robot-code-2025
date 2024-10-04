@@ -12,6 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import edu.wpi.first.math.system.plant.DCMotor;
 
 public class SwerveModule {
   private static final double kWheelRadius = 0.1016; // 4 inch wheel radius in meters
@@ -32,6 +34,14 @@ public class SwerveModule {
       new TrapezoidProfile.Constraints(Double.MAX_VALUE, kModuleMaxAngularAcceleration) // No speed limit, but max accel remains
   );
   
+  // Simulation objects
+  private final FlywheelSim m_driveMotorSim = new FlywheelSim(DCMotor.getFalcon500(1), 1.0, 0.025);
+  private final FlywheelSim m_turningMotorSim = new FlywheelSim(DCMotor.getVex775Pro(1), 1.0, 0.01);
+
+  // Simulation variables for tracking position
+  private double driveMotorSimPosition = 0;
+  private double turningMotorSimPosition = 0;
+
   // NetworkTables
   private final NetworkTableInstance ntInstance;
   private final NetworkTable ntTable;
@@ -124,5 +134,30 @@ public class SwerveModule {
           System.out.println("Turn Output: " + turnOutput);
           lastPrintTime = currentTime;
       }
+  }
+
+  /**
+   * Updates the simulation for the drive and turning motors.
+   *
+   * This method should be called periodically during simulation.
+   */
+  public void simulationPeriodic(double dt) {
+      // Update flywheel simulations
+      m_driveMotorSim.update(dt);
+      m_turningMotorSim.update(dt);
+      
+      // Simulate position by integrating angular velocity
+      double driveVelocityRadPerSec = m_driveMotorSim.getAngularVelocityRadPerSec();
+      double turningVelocityRadPerSec = m_turningMotorSim.getAngularVelocityRadPerSec();
+      
+      driveMotorSimPosition += driveVelocityRadPerSec * dt;
+      turningMotorSimPosition += turningVelocityRadPerSec * dt;
+      
+      // Publish simulation data to NetworkTables
+      System.out.println("SimDrivePosition" + driveMotorSimPosition);
+      System.out.println("SimDriveVelocity" + driveVelocityRadPerSec);
+      
+      System.out.println("SimTurningPosition"+ turningMotorSimPosition);
+      System.out.println("SimTurningVelocity"+ turningVelocityRadPerSec);
   }
 }
