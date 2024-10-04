@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
@@ -50,6 +51,7 @@ public class SwerveModule {
     public SwerveModule(int driveMotorChannel, int turningMotorChannel) {
         m_driveMotor = new TalonFX(driveMotorChannel);
         m_turningMotor = new WPI_TalonSRX(turningMotorChannel);
+        m_turningMotor.setNeutralMode(NeutralMode.Brake); // Set the turning motor to brake mode
 
         // Configure the Lamprey2 encoder in quadrature mode
         m_turningMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
