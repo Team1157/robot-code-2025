@@ -61,6 +61,16 @@
           "open": true
         }
       },
+      "Talon SRX[4]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[6]": {
+        "header": {
+          "open": true
+        }
+      },
       "Talon SRX[8]": {
         "header": {
           "open": true
