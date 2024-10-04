@@ -1,3 +1,12 @@
+# Button Mapping:
+
+- Swerve translation: left stick
+- Swerve rotation: right stick
+- Gyro reset: right bumper bottomed out
+- Callibrate gyro: A button
+- Intake motor: need to assign
+- Shooter motor: need to assign
+
 # CAN IDs:
 
 1. **CAN ID 9** – TalonSRX for the shooter.
