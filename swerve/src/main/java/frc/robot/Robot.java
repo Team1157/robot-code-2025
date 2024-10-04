@@ -70,6 +70,6 @@ public class Robot extends LoggedRobot {
     final var rot = -m_rotLimiter.calculate(1.2 * MathUtil.applyDeadband(m_controller.getRawAxis(5), 0.02))
         * Drivetrain.kMaxAngularSpeed;
 
-    m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative, getPeriod());
+    m_swerve.drive(xSpeed, ySpeed, rot, getPeriod());
   }
 }
