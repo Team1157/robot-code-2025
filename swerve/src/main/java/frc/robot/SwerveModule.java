@@ -113,7 +113,7 @@ public class SwerveModule {
 
         // Set motor outputs
         m_driveMotor.set(driveOutput);
-        m_turningMotor.setVoltage(turningOutput);
+        m_turningMotor.setVoltage(turningOutput*100);
 
         // Publish desired state to NetworkTables
         ntTable.getEntry("DesiredSpeed").setDouble(state.speedMetersPerSecond);
