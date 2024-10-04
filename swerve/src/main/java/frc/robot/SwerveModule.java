@@ -22,8 +22,6 @@ public class SwerveModule {
 
   private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
 
-  // Set a high velocity limit for turning PID controller to effectively have no speed limit, but retain the acceleration limit
-  
   // Simulation objects
   private final FlywheelSim m_driveMotorSim = new FlywheelSim(DCMotor.getFalcon500(1), 1.0, 0.025);
   private final FlywheelSim m_turningMotorSim = new FlywheelSim(DCMotor.getVex775Pro(1), 1.0, 0.01);
@@ -64,9 +62,14 @@ public class SwerveModule {
     double driveVelocity = m_driveMotor.getVelocity().getValue() * kWheelRadius * 2 * Math.PI / kEncoderResolution;
     double turningPosition = m_turningMotor.getSelectedSensorPosition() * 2 * Math.PI / kEncoderResolution;
 
-    // Publish data to NetworkTables
-    ntTable.getEntry("DriveVelocity").setDouble(driveVelocity);
+    // Publish raw sensor position (in encoder ticks) to NetworkTables
+    ntTable.getEntry("TurningEncoderTicks").setDouble(m_turningMotor.getSelectedSensorPosition());
+
+    // Publish calculated turning position (in radians)
     ntTable.getEntry("TurningPosition").setDouble(turningPosition);
+
+    // Publish drive velocity
+    ntTable.getEntry("DriveVelocity").setDouble(driveVelocity);
 
     return new SwerveModuleState(driveVelocity, new Rotation2d(turningPosition));
   }
@@ -80,9 +83,14 @@ public class SwerveModule {
     double driveDistance = m_driveMotor.getPosition().getValue() * kWheelRadius * 2 * Math.PI / kEncoderResolution;
     double turningPosition = m_turningMotor.getSelectedSensorPosition() * 2 * Math.PI / kEncoderResolution;
 
-    // Publish data to NetworkTables
-    ntTable.getEntry("DriveDistance").setDouble(driveDistance);
+    // Publish raw sensor position (in encoder ticks) to NetworkTables
+    ntTable.getEntry("TurningEncoderTicks").setDouble(m_turningMotor.getSelectedSensorPosition());
+
+    // Publish calculated turning position (in radians)
     ntTable.getEntry("TurningPosition").setDouble(turningPosition);
+
+    // Publish drive distance
+    ntTable.getEntry("DriveDistance").setDouble(driveDistance);
 
     return new SwerveModulePosition(driveDistance, new Rotation2d(turningPosition));
   }
@@ -107,7 +115,10 @@ public class SwerveModule {
 
     // Convert the desired angle (in radians) to encoder ticks
     double turnTargetTicks = (state.angle.getRadians() * kEncoderResolution) / (2 * Math.PI);
-    
+
+    // Publish target encoder ticks to NetworkTables
+    ntTable.getEntry("TurningTargetTicks").setDouble(turnTargetTicks);
+
     // Set the turning motor position to the target in encoder ticks
     m_turningMotor.set(ControlMode.Position, turnTargetTicks);
 
@@ -118,13 +129,13 @@ public class SwerveModule {
     // Set motor outputs
     m_driveMotor.set(driveOutput);
 
-    // Print turnTargetTicks every second for debugging
+    // Print turnTargetTicks every 4 seconds for debugging
     long currentTime = System.currentTimeMillis();
     if (currentTime - lastPrintTime >= 4000) {
         System.out.println("Turn Target Ticks: " + turnTargetTicks);
         lastPrintTime = currentTime;
     }
-}
+  }
 
   /**
    * Updates the simulation for the drive and turning motors.
@@ -135,19 +146,20 @@ public class SwerveModule {
       // Update flywheel simulations
       m_driveMotorSim.update(dt);
       m_turningMotorSim.update(dt);
-      
+
       // Simulate position by integrating angular velocity
       double driveVelocityRadPerSec = m_driveMotorSim.getAngularVelocityRadPerSec();
       double turningVelocityRadPerSec = m_turningMotorSim.getAngularVelocityRadPerSec();
-      
+
       driveMotorSimPosition += driveVelocityRadPerSec * dt;
       turningMotorSimPosition += turningVelocityRadPerSec * dt;
-      
+
       // Publish simulation data to NetworkTables
-      System.out.println("SimDrivePosition" + driveMotorSimPosition);
-      System.out.println("SimDriveVelocity" + driveVelocityRadPerSec);
-      
-      System.out.println("SimTurningPosition"+ turningMotorSimPosition);
-      System.out.println("SimTurningVelocity"+ turningVelocityRadPerSec);
+      System.out.println("SimDrivePosition: " + driveMotorSimPosition);
+      System.out.println("SimDriveVelocity: " + driveVelocityRadPerSec);
+
+      System.out.println("SimTurningPosition: " + turningMotorSimPosition);
+      System.out.println("SimTurningVelocity: " + turningVelocityRadPerSec);
   }
 }
+
