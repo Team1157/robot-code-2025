@@ -56,18 +56,18 @@ public class Robot extends LoggedRobot {
 
   private void driveWithJoystick(boolean fieldRelative) {
     // Get the x speed. We aren't inverting cause gamecube wooh
-    final var xSpeed = m_xspeedLimiter.calculate(1.2 * MathUtil.applyDeadband(m_controller.getLeftY(), 0.02))
+    final var xSpeed = m_xspeedLimiter.calculate(1.2 * MathUtil.applyDeadband(m_controller.getLeftY(), 0.1))
         * Drivetrain.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
-    final var ySpeed = -m_yspeedLimiter.calculate(1.2 * MathUtil.applyDeadband(m_controller.getLeftX(), 0.02))
+    final var ySpeed = -m_yspeedLimiter.calculate(1.2 * MathUtil.applyDeadband(m_controller.getLeftX(), 0.1))
         * Drivetrain.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left
-    final var rot = -m_rotLimiter.calculate(1.2 * MathUtil.applyDeadband(m_controller.getRawAxis(5), 0.02))
+    final var rot = -m_rotLimiter.calculate(1.2 * MathUtil.applyDeadband(m_controller.getRawAxis(5), 0.1))
         * Drivetrain.kMaxAngularSpeed;
 
     m_swerve.drive(xSpeed, ySpeed, rot, getPeriod());
