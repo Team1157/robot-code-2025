@@ -41,8 +41,6 @@ public class Drivetrain {
   private final Field2d m_field2d = new Field2d();
 
   public Drivetrain() {
-    m_gyro.reset();
-
     m_odometry = new SwerveDriveOdometry(
         m_kinematics,
         m_gyro.getRotation2d(),

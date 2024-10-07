@@ -117,7 +117,13 @@
           "open": true
         }
       },
+      "SwerveModule1": {
+        "open": true
+      },
       "SwerveModule3": {
+        "open": true
+      },
+      "SwerveModule5": {
         "open": true
       }
     }
@@ -125,8 +131,7 @@
   "NetworkTables Info": {
     "Connections": {
       "open": true
-    },
-    "visible": true
+    }
   },
   "Plot": {
     "Plot <0>": {
