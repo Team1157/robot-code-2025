@@ -36,6 +36,7 @@ public class Drivetrain {
   private final SwerveDriveOdometry m_odometry;
 
   private final NetworkTableEntry m_controlModeEntry;
+  private final NetworkTableEntry m_gyroOutputEntry;
   
   private final Field2d m_field2d = new Field2d();
 
@@ -54,8 +55,9 @@ public class Drivetrain {
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("Drivetrain");
     m_controlModeEntry = table.getEntry("ControlMode");
+    m_gyroOutputEntry = table.getEntry("GyroRotation");
     
-    // Initialize control mode options
+    // Publish control mode options
     publishControlModeOptions();
 
     // Publish the Field2d object to SmartDashboard
@@ -63,13 +65,10 @@ public class Drivetrain {
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, double periodSeconds) {
-    boolean fieldRelative = m_controlModeEntry.getString("Robot-Relative").equals("Field-Relative");
-
+    // Always use field-relative control
     var swerveModuleStates = m_kinematics.toSwerveModuleStates(
         ChassisSpeeds.discretize(
-            fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
-                : new ChassisSpeeds(xSpeed, ySpeed, rot),
+            ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d()),
             periodSeconds));
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
@@ -78,6 +77,9 @@ public class Drivetrain {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
+
+    // Output gyro rotation to NetworkTables for diagnostics
+    m_gyroOutputEntry.setDouble(m_gyro.getAngle());
   }
 
   public void updateOdometry() {
@@ -95,7 +97,7 @@ public class Drivetrain {
   }
 
   private void publishControlModeOptions() {
-    String[] options = {"Robot-Relative", "Field-Relative"};
+    String[] options = {"Field-Relative"};
     m_controlModeEntry.setStringArray(options);
   }
 

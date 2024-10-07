@@ -36,8 +36,8 @@ public class SwerveModule {
     private final NetworkTableInstance ntInstance;
     private final NetworkTable ntTable;
 
-    // PID constants for turning control
-    private static final double kP = 0.1;
+    // PID constants for turning control that sorta work but i might up everything so its speeeedy
+    private static final double kP = 0.5;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
     private final PIDController m_turningPIDController = new PIDController(kP, kI, kD);
@@ -51,10 +51,10 @@ public class SwerveModule {
     public SwerveModule(int driveMotorChannel, int turningMotorChannel) {
         m_driveMotor = new TalonFX(driveMotorChannel);
         m_turningMotor = new WPI_TalonSRX(turningMotorChannel);
-        m_turningMotor.setNeutralMode(NeutralMode.Brake); // Set the turning motor to brake mode
+        m_turningMotor.setNeutralMode(NeutralMode.Brake); // Set the turning motor to brake mode so i can have some semblance of precision
 
-        // Configure the Lamprey2 encoder in quadrature mode
-        m_turningMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
+        // Configure the Lamprey2 encoder in ANALOG mode, I'm an idiot
+        m_turningMotor.configSelectedFeedbackSensor(FeedbackDevice.Analog, 0, 10);
 
         // Initialize NetworkTables
         ntInstance = NetworkTableInstance.getDefault();
@@ -115,7 +115,7 @@ public class SwerveModule {
 
         // Set motor outputs
         m_driveMotor.set(driveOutput);
-        m_turningMotor.setVoltage(turningOutput*100);
+        m_turningMotor.set(turningOutput);
 
         // Publish desired state to NetworkTables
         ntTable.getEntry("DesiredSpeed").setDouble(state.speedMetersPerSecond);
@@ -141,7 +141,8 @@ public class SwerveModule {
      * @return The current turning position in radians.
      */
     private double getTurningPosition() {
-        return m_turningMotor.getSelectedSensorPosition() * 2 * Math.PI / kEncoderResolution;
+        // Convert the encoder value to radians
+        return (m_turningMotor.getSelectedSensorPosition() / kEncoderResolution) * 2 * Math.PI;
     }
 
     /**
