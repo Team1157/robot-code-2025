@@ -29,7 +29,10 @@ public class Drivetrain {
   private final SwerveModule m_backRight = new SwerveModule(7, 8);
 
   private final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
-  
+  public void resetGyro() {
+    m_gyro.reset();
+}
+
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
@@ -63,11 +66,12 @@ public class Drivetrain {
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, double periodSeconds) {
-    // Always use field-relative control
+    // Field-relative control
+    ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+        xSpeed, ySpeed, rot, m_gyro.getRotation2d());
+    
     var swerveModuleStates = m_kinematics.toSwerveModuleStates(
-        ChassisSpeeds.discretize(
-            ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d()),
-            periodSeconds));
+        ChassisSpeeds.discretize(chassisSpeeds, periodSeconds));
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
 
@@ -78,7 +82,7 @@ public class Drivetrain {
 
     // Output gyro rotation to NetworkTables for diagnostics
     m_gyroOutputEntry.setDouble(m_gyro.getAngle());
-  }
+}
 
   public void updateOdometry() {
     m_odometry.update(
