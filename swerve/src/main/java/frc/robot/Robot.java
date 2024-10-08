@@ -1,6 +1,7 @@
 package frc.robot;
 
 import org.littletonrobotics.junction.LoggedRobot;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
@@ -17,10 +18,10 @@ public class Robot extends LoggedRobot {
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
+  private final Drivetrain m_drivetrain = new Drivetrain();
 
   @Override
   public void robotInit() {
-    // Initialize and calibrate gyro
   }
 
   @Override
@@ -41,8 +42,8 @@ public class Robot extends LoggedRobot {
     driveWithJoystick(true);
     // Reset gyro with z button on the gcc and calibrate gyro with the a button
     if (m_controller.getRawButton(8)) {
-      //gyro.reset();
-    }
+      m_drivetrain.resetGyro();
+    }    
     if (m_controller.getRawButton(2)) {
       //gyro.calibrate();
     }
