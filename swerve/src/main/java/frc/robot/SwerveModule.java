@@ -36,8 +36,8 @@ public class SwerveModule {
     private final NetworkTableInstance ntInstance;
     private final NetworkTable ntTable;
 
-    // PID constants for turning control that sorta work but i might up everything so its speeeedy
-    private static final double kP = 1.5;
+    // PID constants for turning control that sorta work but i upped everything so its speeeedy
+    private static final double kP = 2;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
     private final PIDController m_turningPIDController = new PIDController(kP, kI, kD);
