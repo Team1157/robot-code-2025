@@ -50,20 +50,24 @@ public class Robot extends LoggedRobot {
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
-    // Get the x speed. We aren't inverting cause gamecube wooh
-    final var xSpeed = m_xspeedLimiter.calculate(1.2 * MathUtil.applyDeadband(m_controller.getLeftY(), 0.1))
-        * Drivetrain.kMaxSpeed;
+    // Get raw inputs
+    double leftX = MathUtil.applyDeadband(m_controller.getLeftX(), 0.1);
+    double leftY = MathUtil.applyDeadband(m_controller.getLeftY(), 0.1);
 
-    // Get the y speed or sideways/strafe speed. We are inverting this because
-    // we want a positive value when we pull to the left.
-    final var ySpeed = m_yspeedLimiter.calculate(1.2 * MathUtil.applyDeadband(m_controller.getLeftX(), 0.1))
-        * Drivetrain.kMaxSpeed;
+    // Square the inputs while preserving sign
+    leftX = Math.copySign(leftX * leftX, leftX);
+    leftY = Math.copySign(leftY * leftY, leftY);
 
-    // Get the rate of angular rotation. we want a
-    // positive value when we pull to the left
+    // Apply slew rate limiters and scale inputs
+    final var xSpeed = m_xspeedLimiter.calculate(1.2 * leftY) * Drivetrain.kMaxSpeed;
+    final var ySpeed = m_yspeedLimiter.calculate(1.2 * leftX) * Drivetrain.kMaxSpeed;
+
+    // Get the rate of angular rotation 
     final var rot = m_rotLimiter.calculate(1.2 * MathUtil.applyDeadband(m_controller.getRawAxis(5), 0.1))
         * Drivetrain.kMaxAngularSpeed;
 
+    // Drive the swerve with square inputs
     m_swerve.drive(xSpeed, ySpeed, rot, getPeriod());
-  }
+}
+
 }

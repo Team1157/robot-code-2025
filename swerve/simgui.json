@@ -115,7 +115,11 @@
         },
         ".recording": {
           "open": true
-        }
+        },
+        "open": true
+      },
+      "SmartDashboard": {
+        "open": true
       },
       "SwerveModule1": {
         "open": true
@@ -131,7 +135,8 @@
   "NetworkTables Info": {
     "Connections": {
       "open": true
-    }
+    },
+    "visible": true
   },
   "Plot": {
     "Plot <0>": {
