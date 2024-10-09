@@ -45,7 +45,7 @@ public class Robot extends LoggedRobot {
       m_drivetrain.resetGyro();
     }    
     if (m_controller.getRawButton(2)) {
-      //gyro.calibrate();
+      m_drivetrain.calibrateGyro();
     }
   }
 
