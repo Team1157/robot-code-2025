@@ -30,8 +30,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    driveWithJoystick(true);
-    m_swerve.updateOdometry();
+    m_drivetrain.playMusic();
   }
 
   @Override
