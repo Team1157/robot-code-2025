@@ -1,3 +1,7 @@
+# Pinout:
+
+- gyro on cs0
+
 # Button Mapping:
 
 - Swerve translation: left stick
