@@ -3,7 +3,7 @@
 - Swerve translation: left stick
 - Swerve rotation: right stick
 - Gyro reset: right bumper bottomed out
-- Callibrate gyro: A button
+- Calibrate gyro: A button
 - Intake motor: need to assign
 - Shooter motor: need to assign
 
