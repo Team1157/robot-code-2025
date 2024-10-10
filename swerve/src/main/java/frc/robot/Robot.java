@@ -18,7 +18,6 @@ public class Robot extends LoggedRobot {
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(4);
   private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(4);
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
-  private final Drivetrain m_drivetrain = new Drivetrain();
 
   @Override
   public void robotInit() {
@@ -30,7 +29,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    m_drivetrain.playMusic();
+    m_swerve.playMusic();
   }
 
   @Override
@@ -41,10 +40,10 @@ public class Robot extends LoggedRobot {
     driveWithJoystick(true);
     // Reset gyro with z button on the gcc and calibrate gyro with the a button
     if (m_controller.getRawButton(8)) {
-      m_drivetrain.resetGyro();
+      m_swerve.resetGyro();
     }    
     if (m_controller.getRawButton(2)) {
-      m_drivetrain.calibrateGyro();
+      m_swerve.calibrateGyro();
     }
   }
 
